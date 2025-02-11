@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+public class Hangman {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Word to guess
+        String word = "JAVA";
+        // String to keep track of guessed letters
+        StringBuilder guessedWord = new StringBuilder("_".repeat(word.length()));
+        // Set to store unique guessed letters
+        StringBuilder guessedLetters = new StringBuilder();
+
+        int attempts = 6; // Number of attempts the player has
+        boolean isWordGuessed = false;
+
+        System.out.println("Welcome to Hangman!");
+        System.out.println("The word to guess has " + word.length() + " letters.");
+
+        while (attempts > 0 && !isWordGuessed) {
+            System.out.println("\nWord: " + guessedWord);
+            System.out.println("Guessed letters: " + guessedLetters);
+            System.out.println("Attempts remaining: " + attempts);
+            System.out.print("Enter a letter: ");
+            
+            char guess = scanner.nextLine().toUpperCase().charAt(0);
+
+            // Check if the letter was already guessed
+            if (guessedLetters.toString().contains(String.valueOf(guess))) {
+                System.out.println("You already guessed that letter. Try again.");
+                continue;
+            }
+
+            // Add guessed letter to guessed letters set
+            guessedLetters.append(guess);
+
+            // Check if the guessed letter is in the word
+            boolean correctGuess = false;
+            for (int i = 0; i < word.length(); i++) {
+                if (word.charAt(i) == guess) {
+                    guessedWord.setCharAt(i, guess);
+                    correctGuess = true;
+                }
+            }
+
+            if (!correctGuess) {
+                attempts--;
+                System.out.println("Incorrect guess.");
+            }
+
+            // Check if the word is completely guessed
+            isWordGuessed = guessedWord.toString().equals(word);
+        }
+
+        if (isWordGuessed) {
+            System.out.println("\nCongratulations! You've guessed the word: " + word);
+        } else {
+            System.out.println("\nGame over! The word was: " + word);
+        }
+
+        scanner.close();
+    }
+}
